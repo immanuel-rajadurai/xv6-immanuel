@@ -18,3 +18,9 @@ are checks or assumptions made about the address space. Think about what happens
 pass a parameter into the kernel, for example; if passing a pointer, the kernel needs to be very
 careful with it, to ensure you haven’t passed it a bad pointer. How does it do this now? Does
 this code need to change in order to work in your new version of xv6?
+One last hint: you’ll have to look at the xv6 makefile as well. In there user programs are compiled
+so as to set their entry point (where the first instruction is) to 0. If you change xv6 to make the
+first page invalid, clearly the entry point will have to be somewhere else (e.g., the next page,
+or 0x1000). Thus, something in the makefile will need to change to reflect this as well.
+Sources: Initial code taken from Stephan Kells repository provided via CourseWork, I also burrowed
+code for the mprotect and munprotect system calls, from Mohamed-Abd-El-Nasser's repository called xv6-projects/xv6 Virtual Memory/
