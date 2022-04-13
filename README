@@ -1,51 +1,20 @@
-NOTE: we have stopped maintaining the x86 version of xv6, and switched
-our efforts to the RISC-V version
-(https://github.com/mit-pdos/xv6-riscv.git)
-
-xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
-Version 6 (v6).  xv6 loosely follows the structure and style of v6,
-but is implemented for a modern x86-based multiprocessor using ANSI C.
-
-ACKNOWLEDGMENTS
-
-xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
-to Peer Communications; ISBN: 1-57398-013-7; 1st edition (June 14,
-2000)). See also https://pdos.csail.mit.edu/6.828/, which
-provides pointers to on-line resources for v6.
-
-xv6 borrows code from the following sources:
-    JOS (asm.h, elf.h, mmu.h, bootasm.S, ide.c, console.c, and others)
-    Plan 9 (entryother.S, mp.h, mp.c, lapic.c)
-    FreeBSD (ioapic.c)
-    NetBSD (console.c)
-
-The following people have made contributions: Russ Cox (context switching,
-locking), Cliff Frey (MP), Xiao Yu (MP), Nickolai Zeldovich, and Austin
-Clements.
-
-We are also grateful for the bug reports and patches contributed by Silas
-Boyd-Wickizer, Anton Burtsev, Cody Cutler, Mike CAT, Tej Chajed, eyalz800,
-Nelson Elhage, Saar Ettinger, Alice Ferrazzi, Nathaniel Filardo, Peter
-Froehlich, Yakir Goaron,Shivam Handa, Bryan Henry, Jim Huang, Alexander
-Kapshuk, Anders Kaseorg, kehao95, Wolfgang Keller, Eddie Kohler, Austin
-Liew, Imbar Marinescu, Yandong Mao, Matan Shabtay, Hitoshi Mitake, Carmi
-Merimovich, Mark Morrissey, mtasm, Joel Nider, Greg Price, Ayan Shafqat,
-Eldar Sehayek, Yongming Shen, Cam Tenny, tyfkda, Rafael Ubal, Warren
-Toomey, Stephen Tu, Pablo Ventura, Xi Wang, Keiichi Watanabe, Nicolas
-Wolovick, wxdao, Grant Wu, Jindong Zhang, Icenowy Zheng, and Zou Chang Wei.
-
-The code in the files that constitute xv6 is
-Copyright 2006-2018 Frans Kaashoek, Robert Morris, and Russ Cox.
-
-ERROR REPORTS
-
-We don't process error reports (see note on top of this file).
-
-BUILDING AND RUNNING XV6
-
-To build xv6 on an x86 ELF machine (like Linux or FreeBSD), run
-"make". On non-x86 or non-ELF machines (like OS X, even on x86), you
-will need to install a cross-compiler gcc suite capable of producing
-x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).
-Then run "make TOOLPREFIX=i386-jos-elf-". Now install the QEMU PC
-simulator and run "make qemu".
+In this project, you’ll be changing xv6 to support a feature virtually every modern OS does:
+causing an exception to occur when your program dereferences a null pointer, and adding the
+ability to change the protection levels of some pages in a process’s address space.
+Null-pointer Dereference (done for you)
+In xv6, the VM system uses a simple two-level page table as discussed in class. As it currently
+is structured, user code is loaded into the very first part of the address space. Thus, if you
+dereference a null pointer, you will not see an exception (as you might expect); rather, you will
+see whatever code is the first bit of code in the program that is running. Try it and see!
+Thus, the first thing you might do is create a program that dereferences a null pointer. It is
+simple! See if you can do it. Then run it on Linux as well as xv6, to see the difference.
+Your job here will be to figure out how xv6 sets up a page table. Thus, once again, this project
+is mostly about understanding the code, and not writing very much. Look at how exec() works
+to better understand how address spaces get filled with code and in general initialized.
+You should also look at fork(), in particular the part where the address space of the child is
+created by copying the address space of the parent. What needs to change in there?
+The rest of your task will be completed by looking through the code to figure out where there
+are checks or assumptions made about the address space. Think about what happens when you
+pass a parameter into the kernel, for example; if passing a pointer, the kernel needs to be very
+careful with it, to ensure you haven’t passed it a bad pointer. How does it do this now? Does
+this code need to change in order to work in your new version of xv6?
