@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include <stdio.h>
 
 struct {
   struct spinlock lock;
@@ -533,4 +534,10 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+int 
+cps()
+{
+  return 22;
 }
